@@ -1,0 +1,34 @@
+# systemd/reclaw-autoresearch.service — Autoresearch One-Shot Service
+#
+# Runs the overnight optimization loop once. Triggered by the timer
+# (reclaw-autoresearch.timer). Not meant to be started manually in most cases.
+#
+# SETUP (do this alongside the timer setup):
+#   1. Copy to ~/.config/systemd/user/reclaw-autoresearch.service
+#   2. Edit WorkingDirectory and ExecStart to match your paths
+#   3. systemctl --user daemon-reload
+#
+# VIEW LOGS:
+#   journalctl --user -u reclaw-autoresearch -f
+
+[Unit]
+Description=ReClaw Autoresearch — Overnight Optimization Pass
+After=network-online.target
+
+[Service]
+Type=oneshot
+
+# --- Edit these two lines to match your setup ---
+WorkingDirectory=/home/YOUR_USERNAME/reclaw-scaffold
+ExecStart=/home/YOUR_USERNAME/reclaw-scaffold/venv/bin/python workspace/autoresearch/orchestrator.py
+# ------------------------------------------------
+
+StandardOutput=journal
+StandardError=journal
+EnvironmentFile=/home/YOUR_USERNAME/reclaw-scaffold/.env
+
+# Timeout: if the loop hangs for more than 2 hours, kill it
+TimeoutStartSec=7200
+
+[Install]
+WantedBy=default.target
