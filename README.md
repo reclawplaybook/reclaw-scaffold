@@ -44,6 +44,8 @@ chmod +x setup.sh
 
 This creates a virtual environment, installs dependencies, and copies template files.
 
+> **Alternative — agent-assisted setup:** If you already have an AI agent running (Claude Code, another OpenClaw, etc.), you can skip the manual steps below and have it run `bootstrap.py` instead. See Part 12 of the Playbook PDF for the one-line command. `bootstrap.py` is interactive and handles file edits for you; `setup.sh` (above) is the traditional direct-CLI path.
+
 ### Step 2 — Create a Discord Bot (5 min)
 
 1. Go to [discord.com/developers/applications](https://discord.com/developers/applications)

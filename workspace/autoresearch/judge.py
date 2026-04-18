@@ -30,7 +30,7 @@ load_dotenv(os.path.join(os.path.dirname(__file__), "..", "..", ".env"))
 logger = logging.getLogger("judge")
 
 OPENCLAW_PROXY_URL = os.getenv("OPENCLAW_PROXY_URL", "http://127.0.0.1:3456")
-JUDGE_MODEL = os.getenv("JUDGE_MODEL", "claude-opus-4-5")
+JUDGE_MODEL = os.getenv("JUDGE_MODEL", "claude-sonnet-4-6")
 
 _client = None
 

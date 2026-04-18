@@ -27,7 +27,7 @@ logger = logging.getLogger("agent")
 # ---------------------------------------------------------------------------
 OPENCLAW_PROXY_URL = os.getenv("OPENCLAW_PROXY_URL", "http://127.0.0.1:3456")
 OPENCLAW_USE_SDK = os.getenv("OPENCLAW_USE_SDK", "true").lower() == "true"
-MODEL_NAME = os.getenv("MODEL_NAME", "claude-opus-4-5")
+MODEL_NAME = os.getenv("MODEL_NAME", "claude-sonnet-4-6")
 MAX_TOKENS = int(os.getenv("MAX_TOKENS", "4096"))
 
 # Path to workspace context files (relative to repo root; adjust if needed)
