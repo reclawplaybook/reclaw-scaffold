@@ -9,7 +9,7 @@
   "scripts": {
     "start": "node src/main.js",
     "doctor": "bash reclaw-doctor.sh",
-    "test": "node --test tests/*.test.js && bash reclaw-doctor.sh"
+    "test": "node --test tests/*.test.js && RECLAW_PROVIDER=demo bash reclaw-doctor.sh"
   },
   "dependencies": {
     "@anthropic-ai/claude-code": "^2.1.126",

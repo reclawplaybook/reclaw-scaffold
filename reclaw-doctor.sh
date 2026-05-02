@@ -10,6 +10,11 @@ required_pass=0
 optional_total=0
 optional_pass=0
 source_mode=0
+provider="claude"
+if [ -f .env ]; then
+  provider="$(grep -E '^RECLAW_PROVIDER=' .env 2>/dev/null | head -1 | cut -d= -f2- | tr -d '"' || true)"
+fi
+provider="${RECLAW_PROVIDER:-${provider:-claude}}"
 
 pass() { printf '✓ %s\n' "$1"; }
 fail() { printf '✗ %s\n' "$1"; }
@@ -48,6 +53,10 @@ check_node() {
 }
 
 check_claude() {
+  if [ "$provider" = "demo" ]; then
+    skip "Claude Code CLI not required in demo mode"
+    return 0
+  fi
   if command -v claude >/dev/null 2>&1; then
     pass "Claude Code CLI installed ($(claude --version 2>/dev/null | head -1))"
     return 0
@@ -57,6 +66,10 @@ check_claude() {
 }
 
 check_auth() {
+  if [ "$provider" = "demo" ]; then
+    pass "Demo mode configured (no paid AI auth required)"
+    return 0
+  fi
   if [ -n "${ANTHROPIC_API_KEY:-}" ] || grep -q '^ANTHROPIC_API_KEY=.' .env 2>/dev/null; then
     pass "Anthropic API key configured"
     return 0
@@ -146,6 +159,10 @@ check_memory_commands() {
 }
 
 check_claude_call() {
+  if [ "$provider" = "demo" ]; then
+    skip "Claude live API test skipped in demo mode"
+    return 0
+  fi
   if [ "${RECLAW_SKIP_CLAUDE_TEST:-}" = "1" ]; then
     skip "Claude live API test skipped by RECLAW_SKIP_CLAUDE_TEST=1"
     return 0

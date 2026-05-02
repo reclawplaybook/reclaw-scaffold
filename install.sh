@@ -118,7 +118,6 @@ main() {
   echo "ReClaw installer starting ($os)"
   install_git_hint "$os"
   ensure_node
-  ensure_claude
   copy_scaffold
 
   cd "$INSTALL_DIR"
@@ -126,10 +125,21 @@ main() {
 
   USER_NAME="${RECLAW_USER_NAME:-$(ask "What's your name? " "Operator")}"
   USER_WORK="${RECLAW_USER_WORK:-$(ask "What do you do? (one sentence) " "I run work that needs reliable follow-through.")}"
-  tier_answer="${RECLAW_TIER:-$(ask "Which Claude tier? [1] Pro \$20/mo [2] Max 5x \$100/mo [3] Max 20x \$200/mo " "1")}"
+  provider_answer="${RECLAW_PROVIDER:-$(ask "AI brain? [1] Demo/free test mode [2] Claude Code or Anthropic API " "1")}"
+  case "$provider_answer" in
+    claude|2) RECLAW_PROVIDER="claude" ;;
+    *) RECLAW_PROVIDER="demo" ;;
+  esac
+  tier_answer="${RECLAW_TIER:-$(ask "Heartbeat tier? [1] Starter 60m [2] Operator 30m [3] Heavy 15m " "1")}"
   CLAUDE_TIER="$(tier_name "$tier_answer")"
   HEARTBEAT_INTERVAL="$(tier_minutes "$tier_answer")"
-  api_key="${ANTHROPIC_API_KEY:-$(ask "Paste your Anthropic API key (or press Enter to use Claude Code OAuth): " "")}"
+  api_key=""
+  if [ "$RECLAW_PROVIDER" = "claude" ]; then
+    ensure_claude
+    api_key="${ANTHROPIC_API_KEY:-$(ask "Paste your Anthropic API key (or press Enter to use Claude Code OAuth): " "")}"
+  else
+    echo "Using demo mode. No Claude subscription or API key required for this test install."
+  fi
   connect_discord="${RECLAW_CONNECT_DISCORD:-$(ask "Connect Discord? [y/n] " "n")}"
   discord_token=""
   if [ "$connect_discord" = "y" ] || [ "$connect_discord" = "Y" ]; then
@@ -145,6 +155,7 @@ main() {
 
   node bin/write-env.mjs .env \
     "AGENT_NAME=$AGENT_NAME" \
+    "RECLAW_PROVIDER=$RECLAW_PROVIDER" \
     "USER_NAME=$USER_NAME" \
     "USER_WORK=$USER_WORK" \
     "CLAUDE_TIER=$CLAUDE_TIER" \

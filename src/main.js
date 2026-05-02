@@ -32,9 +32,25 @@ async function readFileFromRoot(file) {
   return fs.readFile(new URL(file, `file://${root.endsWith("/") ? root : `${root}/`}`), "utf8");
 }
 
-function runClaude(prompt, system) {
+function demoReply(prompt) {
+  const normalized = prompt.toLowerCase();
+  if (normalized.includes("what are you")) {
+    return `${agentName} is running in demo mode: memory, heartbeats, and local files are working. Connect Claude later for live AI responses.`;
+  }
+  if (normalized.includes("status")) {
+    return `${agentName} status: installed, memory writable, heartbeat loop ready. Demo brain active until Claude is connected.`;
+  }
+  return `${agentName} received: ${prompt}\n\nDemo mode is active, so this response is canned. The local agent loop still works: memory, search, heartbeat, Discord wiring, and doctor checks.`;
+}
+
+function runModel(prompt, system) {
   if (process.env.RECLAW_TEST_MODE === "true") {
     return Promise.resolve(`${agentName} received: ${prompt}`);
+  }
+
+  const provider = (process.env.RECLAW_PROVIDER || "claude").toLowerCase();
+  if (provider === "demo") {
+    return Promise.resolve(demoReply(prompt));
   }
 
   return new Promise((resolve, reject) => {
@@ -61,7 +77,7 @@ function runClaude(prompt, system) {
 
 async function respondToMessage(content) {
   const system = await loadIdentity();
-  const reply = await runClaude(content, system);
+  const reply = await runModel(content, system);
   await append(todayFile(), `\n- ${new Date().toISOString()} message: ${content}\n  reply: ${reply}\n`);
   return reply;
 }

@@ -4,11 +4,31 @@ Working starter scaffold for the ReClaw Playbook.
 
 ## Quick Start
 
+### Free demo mode
+
+Use this first if you do not have Claude, ChatGPT, or an API key yet. Demo mode proves the local loop: install, memory, search, doctor checks, and canned agent replies.
+
+**Windows:**
+
+Download `install-windows.ps1`, right-click it, and choose **Run with PowerShell**. If Windows blocks scripts, open PowerShell and run:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\install-windows.ps1
+```
+
+**macOS, Linux, or WSL2:**
+
 ```bash
 curl -fsSL https://raw.githubusercontent.com/reclawplaybook/reclaw-scaffold/master/install.sh | bash
 ```
 
-The installer creates `~/my-reclaw`, installs Node 22 if needed, installs Claude Code, writes identity files, runs `reclaw doctor`, and starts the agent.
+Choose **Demo/free test mode** when the installer asks for the AI brain.
+
+The installer creates `~/my-reclaw`, installs Node 22 if needed, writes identity files, runs `reclaw doctor`, and starts the agent.
+
+### Live AI mode
+
+After the local loop works, switch to Claude Code OAuth or an Anthropic API key by setting `RECLAW_PROVIDER=claude` in `.env`.
 
 ## Manual Install
 
@@ -35,9 +55,10 @@ reclaw start
 - macOS, Linux, or WSL2
 - Git
 - Node.js 22+
-- Claude Code OAuth or an Anthropic API key
+- Claude Code OAuth or an Anthropic API key for live AI mode
+- No paid AI subscription for demo mode
 
-The installer can install Node 22 via `nvm` and Claude Code via `npm`.
+The installer can install Node 22 via `nvm`. Claude Code is only installed when you choose live AI mode.
 
 ## What It Includes
 
