@@ -1,0 +1,20 @@
+{
+  "name": "reclaw-scaffold",
+  "version": "3.0.0",
+  "type": "module",
+  "description": "Working ReClaw Playbook v3 agent scaffold",
+  "bin": {
+    "reclaw": "./bin/reclaw"
+  },
+  "scripts": {
+    "start": "node src/main.js",
+    "doctor": "bash reclaw-doctor.sh",
+    "test": "node --test tests/*.test.js && bash reclaw-doctor.sh"
+  },
+  "dependencies": {
+    "@anthropic-ai/claude-code": "^2.1.126",
+    "discord.js": "^14.18.0",
+    "dotenv": "^16.4.7"
+  },
+  "devDependencies": {}
+}

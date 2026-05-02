@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="${RECLAW_HOME:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+cmd="${1:-start}"
+shift || true
+
+case "$cmd" in
+  start)
+    cd "$ROOT"
+    exec node src/main.js "$@"
+    ;;
+  doctor)
+    cd "$ROOT"
+    exec bash reclaw-doctor.sh "$@"
+    ;;
+  test-message)
+    cd "$ROOT"
+    exec node src/main.js --test-message "${1:-Say hello from ReClaw.}"
+    ;;
+  heartbeat)
+    cd "$ROOT"
+    exec node src/main.js --heartbeat-once
+    ;;
+  remember)
+    cd "$ROOT"
+    exec node src/main.js --remember "$*"
+    ;;
+  memory-search)
+    cd "$ROOT"
+    exec node src/main.js --memory-search "$*"
+    ;;
+  team-setup)
+    cd "$ROOT"
+    exec bash bin/team-setup.sh "$@"
+    ;;
+  *)
+    echo "Usage: reclaw {start|doctor|test-message|heartbeat|remember|memory-search|team-setup}" >&2
+    exit 2
+    ;;
+esac
